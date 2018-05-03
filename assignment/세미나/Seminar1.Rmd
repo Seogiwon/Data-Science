@@ -1,0 +1,72 @@
+---
+title: "Seminar1"
+author: "donghyuk oh"
+date: "2018년 4월 5일"
+output: html_document
+---
+### 0. 데이터 불러오기 및 요약
+```{r, warning=FALSE}
+tt <- read.csv("C:/Users/118-21/Downloads/titanic.csv")
+str(tt)
+head(tt)
+summary(tt)
+```
+
+
+###1. 그래프와 시각화
+```{r, warning=FALSE}
+# 데이터는 r에 기본적으로 내장되어있는 iris 데이터 활용
+library(dplyr)
+library(ggplot2)
+str(iris)
+head(iris)
+summary(iris)
+```
+
+## 1-1 산점도 그리기 
+
+```{r, warning=FALSE}
+iris %>% ggplot(aes(x=Sepal.Length, y=Sepal.Width, color = Species)) + geom_point(size = 4)
+
+
+# %>% : 연산자 화살표 같은 의미
+# %>% 를 안쓴다면 ggplot(iris,aes(x=Sepal.Length, y=Sepal.Width, color = Species)) + geom_point(size = 4) 를 쓰면 같은 산점도가 나옵니다
+```
+
+
+##1-2 히스토그렘 그리기
+```{r, warning=FALSE}
+iris %>% ggplot(aes(x=Sepal.Length)) + geom_histogram(binwidth=0.4, fill = "steelblue", colour="black")
+
+hist(iris$Sepal.Length)
+
+# hist 함수는 ggplot 을 쓰지않고 간단하게 히스토그렘을 그릴 수 있는 간단한 함수입니다.
+```
+
+##1-3 상자 그림 그리기
+```{r, warning=FALSE}
+iris %>% ggplot(aes(x=Species, y=Sepal.Length)) + geom_boxplot(outlier.color = "red") + stat_summary(fun.y="mean", geom="point", shape=16, size=3, fill="steelblue")
+
+
+# 빨간 점은 이상점(outlier) 으로 다른 관측치 들과 떨어져 있는 값으로 평균이나 기타 통계량에 영향을 주는 관측치를 말합니다.
+# 원래 box plot에는 평균을 표시해주지 않아 stat_summary 함수를 이용하여 평균을 넣었습니다.
+```
+
+
+##1-4 막대 그래프 그리기
+```{r, warning=FALSE}
+iris %>% group_by(Species) %>% summarise(mean=mean(Petal.Length)) %>% ggplot(aes(x=Species, y=mean, fill = Species)) + geom_bar(stat="identity")
+
+# iris 데이터를 Species 에 따라 그룹을 짓고 mean 이라는 변수를 만들어서 y 값으로 넣는다.
+```
+
+
+### + alpha
+```{r, warning=FALSE}
+library(scatterplot3d)
+scatterplot3d(iris[,1:3], pch = 16, color = "steelblue")
+
+
+# 이 예시는 산점도를 그리는 패키지이고 다른 3차원을 다루는 여러 패키지들이 있어서 2차원 뿐만 아니라 3차원으로도 분석하고 싶은 것이 저의 조가 유니콘에서 배우고 싶은 것 입니다.
+```
+
